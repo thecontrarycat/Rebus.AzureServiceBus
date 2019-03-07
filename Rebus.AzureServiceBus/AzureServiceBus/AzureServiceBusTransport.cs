@@ -489,9 +489,16 @@ namespace Rebus.AzureServiceBus
                                 {
                                     await GetTopicClient(topicName).SendAsync(list).ConfigureAwait(false);
                                 }
-                                catch (MessagingEntityNotFoundException)
+                                catch (MessagingEntityNotFoundException mex)
                                 {
-                                    // if the topic does not exist, it's allright
+                                    if (DestinationTopicsMustExist)
+                                    {
+                                        throw new RebusApplicationException(mex, $"Could not publish to topic '{topicName}' as it does not exist in the Azure Service Bus");
+                                    }
+                                    else
+                                    {
+                                        // if the topic does not exist, it's allright
+                                    }
                                 }
                                 catch (Exception exception)
                                 {
@@ -711,6 +718,11 @@ namespace Rebus.AzureServiceBus
         /// Gets/sets the duplicate detection window
         /// </summary>
         public TimeSpan? DuplicateDetectionHistoryTimeWindow { get; set; }
+
+        /// <summary>
+        /// Determines whether to allow sending to topics that have not been created 
+        /// </summary>
+        public bool DestinationTopicsMustExist { get; set; }
 
         /// <summary>
         /// Purges the input queue by receiving all messages as quickly as possible

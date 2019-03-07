@@ -50,23 +50,7 @@ namespace Rebus.AzureServiceBus.Tests.Bugs
 
             eventWasReceived.WaitOrDie(timeout: TimeSpan.FromSeconds(5));
         }
-
-        [Test]
-        public async Task CanPublishToTopicThatDoesNotExist()
-        {
-            await DeleteAllTopics();
-
-            var topicName = Guid.NewGuid().ToString("N");
-
-            // try to ensure we remove the topic afterwards
-            Using(new TopicDeleter(topicName));
-
-            var bus = _activator.Bus;
-
-            // must not throw!
-            await bus.Advanced.Topics.Publish(topicName, "hej med dig min veeeeen!");
-        }
-
+        
         static async Task DeleteAllTopics()
         {
             var managementClient = new ManagementClient(AsbTestConfig.ConnectionString);

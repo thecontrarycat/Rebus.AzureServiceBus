@@ -15,6 +15,7 @@ namespace Rebus.Config
         internal bool AutomaticPeekLockRenewalEnabled { get; set; }
         internal bool DoNotCheckQueueConfigurationEnabled { get; set; }
         internal bool LegacyNamingEnabled { get; set; }
+        internal bool DestinationTopicsMustExistEnabled { get; set; }
         internal TimeSpan? DefaultMessageTimeToLive { get; set; }
         internal TimeSpan? LockDuration { get; set; }
         internal TimeSpan? AutoDeleteOnIdle { get; set; }
@@ -145,6 +146,17 @@ namespace Rebus.Config
         public AzureServiceBusTransportSettings DoNotCheckQueueConfiguration()
         {
             DoNotCheckQueueConfigurationEnabled = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Configures Rebus to throw an exception if a message is published to a topic that does not exist.
+        /// Note that by default, the AzureServiceBusTransport does not complain if the topic has not been created, causing published messages to be lost.
+        /// </summary>
+        public AzureServiceBusTransportSettings DestinationTopicsMustExist()
+        {
+            DestinationTopicsMustExistEnabled = true;
+
             return this;
         }
     }

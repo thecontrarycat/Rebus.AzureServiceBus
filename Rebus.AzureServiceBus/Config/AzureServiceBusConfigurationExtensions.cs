@@ -38,7 +38,7 @@ namespace Rebus.Config
                     var asyncTaskFactory = c.Get<IAsyncTaskFactory>();
                     var nameFormatter = c.Get<INameFormatter>();
 
-                    return new AzureServiceBusTransport(
+                    var transport = new AzureServiceBusTransport(
                         connectionString: connectionString,
                         queueName: null,
                         rebusLoggerFactory: rebusLoggerFactory,
@@ -46,6 +46,10 @@ namespace Rebus.Config
                         nameFormatter: nameFormatter,
                         cancellationToken: cancellationToken
                     );
+
+                    transport.DestinationTopicsMustExist = settingsBuilder.DestinationTopicsMustExistEnabled;
+
+                    return transport;
                 });
 
             RegisterServices(configurer, () => settingsBuilder.LegacyNamingEnabled);
@@ -95,6 +99,7 @@ namespace Rebus.Config
                     transport.LockDuration = settingsBuilder.LockDuration;
                     transport.AutoDeleteOnIdle = settingsBuilder.AutoDeleteOnIdle;
                     transport.DuplicateDetectionHistoryTimeWindow = settingsBuilder.DuplicateDetectionHistoryTimeWindow;
+                    transport.DestinationTopicsMustExist = settingsBuilder.DestinationTopicsMustExistEnabled;
                     
                     return transport;
                 });

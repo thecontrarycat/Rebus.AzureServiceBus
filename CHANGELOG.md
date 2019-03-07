@@ -82,6 +82,7 @@
 * Fix one-way client legacy naming bug (one-way client would not adhere to legacy naming convention, even when `.UseLegacyNaming()` was called on the configuration builder)
 * Default to using topics nested beneath their assemblies, so e.g. `await bus.Subscribe<string>()` will result in the creation of a topic named `mscorlib/System.String`, which will be formatted as a topic named `System.String` nested beneat `mscorlib` in tool that support it
 * Pluggable naming strategy via `INameFormatter`, allowing for customizing all aspects of how e.g. .NET types are named when creating topics from them, how queue names are normalized/sanitized, etc. - thanks [jr01]
+* Add ability to throw an exception if the topic being sent to doesn't exist (option to override behaviour introduced in v6.0.3)
 
 [ehabelgindy]: https://github.com/ehabelgindy
 [jr01]: https://github.com/jr01
